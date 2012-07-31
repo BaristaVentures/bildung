@@ -1,4 +1,4 @@
-# Die Buildung
+# Die Bildung
 
 Welcome to the null industries training project.
 
