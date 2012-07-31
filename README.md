@@ -3,11 +3,10 @@
 Welcome to the null industries training project.
 
 This content is intended to guys and girls desiring to learn how to build web applications the right way using python.
-We believe in pragmatic learning and focus on web development. In deed the goal is to train yourself building high scalable REST-like API's and javascript clients using MVC frameworks.
+We believe in pragmatic learning. The goal is to train yourself building high scalable REST-like API's and javascript clients using MVC frameworks.
 
 Specifically you will learn about django, tastypie, backbone.js, coffeescript, less, PaaS deployment,
 Scrum like life cycles, code management using git and github.
-
 
 This is the first and very early version of this content and we hope to improve this with your help.
 So you know just fork it!
