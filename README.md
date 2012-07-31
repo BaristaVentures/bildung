@@ -45,6 +45,9 @@ Ok this section is to warn you: This is very in progress and by now just try thi
 5. Make your initial commit and push to your repo
 6. Make a pull request to the original repository (this)
 7. Lets start the code review there :) A null guy will check your code and try to help
+8. Once you finish with the poll example. Start building a RESTful API for the poll system using Tastypie
+9. When feel ready lets build an API client using backbone.js
+10. Now that you have the idea try to add a new feature the the poll system but this time code the client using coffeescript and less
 
 NOTE: You can use the following sections to find helpful documentation and recommendations on each of the above steps.
 
