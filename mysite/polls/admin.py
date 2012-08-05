@@ -7,7 +7,7 @@ class ChoiceInline(admin.TabularInline):
     extra = 3
 
 class PollAdmin(admin.ModelAdmin):
-    # This fieldset separate the information in the form view by giving names
+    # These fieldsets separate the information in the form view by giving names
     # to the sections.
     # The 'collapse' option collapse the section that is indicated.
     fieldsets = [
