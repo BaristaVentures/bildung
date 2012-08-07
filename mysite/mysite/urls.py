@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from polls.api import PollResource, ChoiceResource
+from api.resources import PollResource, ChoiceResource
 from django.conf.urls import patterns, include, url
 from tastypie.api import Api
 # from django.conf.urls.defaults import *
