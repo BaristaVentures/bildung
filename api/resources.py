@@ -8,11 +8,12 @@ class PollResource(ModelResource):
     class Meta:
         queryset = Poll.objects.all()
         resource_name = 'polls'
-        authorization = Authorization()
+        allowed_methods = ['get']
+        
 
 class ChoiceResource(ModelResource):
     poll = fields.ForeignKey(PollResource, 'poll')
     class Meta:
         queryset = Choice.objects.all()
         resource_name = 'choices'
-        authorization = Authorization()
+        allowed_methods = ['get']
