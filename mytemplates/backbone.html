@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+    <script src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+    <script src="http://ajax.cdnjs.com/ajax/libs/underscore.js/1.1.6/underscore-min.js"></script>
+    <script src="http://ajax.cdnjs.com/ajax/libs/backbone.js/0.5/backbone-min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+
+	
+
+	var Polls = Backbone.Collection.extend({
+	    model: Poll
+	    //url: 'polls'
+	});
+
+	var Poll = Backbone.Model.extend({
+	    defaults: {
+		question: "Default question.",
+		pub_date: "2012-08-10T22:12:13+00:00"
+	    }
+	    
+	    //urlRoot: "/api/v1/polls/",
+	});
+
+	//var poll = new Poll({ question: "Is it working?", pub_date: "2012-08-10T22:12:13+00:00" });
+	//poll.save();
+
+	var Choice = Backbone.Model.extend({
+	    defaults:{
+		choice: "this is a choice.",
+		votes: 0,
+		poll: new Poll()
+	    }
+	});
+
+	var AppRouter = Backbone.Router.extend({
+	    routes: {
+		"/polls/:id": "getPoll",
+		"*actions": "defaultRoute"
+	    },
+
+	    getPoll: function(id){
+		console.log(id);
+	    },
+
+	    defaultRoute: function(actions){
+		var polls = new Polls();
+		console.log(polls);
+	    }
+	});
+
+	var app_router = new AppRouter();
+	Backbone.history.start();
+    });
+    </script>
+  </head>
+    <body>
+    </body>
+</html>
