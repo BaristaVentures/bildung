@@ -4,29 +4,108 @@
     <script src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
     <script src="http://ajax.cdnjs.com/ajax/libs/underscore.js/1.1.6/underscore-min.js"></script>
     <script src="http://ajax.cdnjs.com/ajax/libs/backbone.js/0.5/backbone-min.js"></script>
+    
+  </head>
+    <body>
     <script type="text/javascript">
-    $(document).ready(function(){
+    
+        var PollsView = Backbone.View.extend({
+	    el: $('body'),
 
-	
-
-	var Polls = Backbone.Collection.extend({
-	    model: Poll
-	    //url: 'polls'
-	});
-
-	var Poll = Backbone.Model.extend({
-	    defaults: {
-		question: "Default question.",
-		pub_date: "2012-08-10T22:12:13+00:00"
-	    }
+	    events: {
+		'click button#add_poll':'addPoll'
+	    },
 	    
-	    //urlRoot: "/api/v1/polls/",
+	    initialize: function(){
+		//_.bindAll(this, 'render', 'addPoll');
+
+		this.collection = new Polls();
+		this.collection.bind('add', this.appendPoll);
+
+		this.render();
+	    },
+	    
+	    render: function(){
+		
+		this.collection.fetch();
+		//$(this.el).append("<button id='add_poll'>Add Poll</button>");
+		$(this.el).append("<ul></ul>");
+		_(this.collection.models).each(function(poll){
+		    self.appendPoll(poll);
+		}, this);
+
+	    },
+
+	    addPoll: function(){
+		var poll_question = $("#poll_question").val();
+		var poll_pub_date = $("#poll_pub_date").val();
+		var poll = new Poll();
+		poll.set({
+		    question: poll_question, 
+		    pub_date: poll_pub_date
+		});
+		poll.save();
+		this.collection.add(poll);
+	    },
+
+	    appendPoll: function(poll){
+		var pollView = new PollView({
+		    model: poll
+		});
+		$('ul', this.el).append(pollView.render().el);
+	    }
+
 	});
 
-	//var poll = new Poll({ question: "Is it working?", pub_date: "2012-08-10T22:12:13+00:00" });
-	//poll.save();
+        var PollView = Backbone.View.extend({
+	    tagName: 'li',
+	    
+	    events: {
+		'click button.delete_poll':'remove'
+	    },
+	    
+	    render: function(){
+		$(this.el).html('<span>' + this.model.get('question') + '</span><button class=delete_poll>Delete</button>');
+		return this;
+	    },
 
-	var Choice = Backbone.Model.extend({
+	    remove: function(){
+		$(this.el).remove();
+		this.model.destroy();
+	    }
+	});
+
+        var Polls = Backbone.Collection.extend({
+	    model: Poll,
+	    url: "/api/v1/polls/",
+
+	    parse: function(data){
+		return data.objects;
+	    }
+
+	});
+
+        var Poll = Backbone.Model.extend({
+	    // defaults: {
+	    // 	question: "Is this a poll?",
+	    // 	pub_date: "2012-08-10T22:12:13+00:00"
+	    // },
+	    urlRoot: "/api/v1/polls/"
+	    
+	    // url: function(){
+	    // 	var base = this.urlRoot;
+	    // 	return base + this.id + "?format=json";
+	    // },
+
+	});
+
+        var pollsView = new PollsView();
+
+//var poll = new Poll({ question: "Is it working now 2?", pub_date: "2012-08-10T22:12:13+00:00" });
+
+//poll.save();
+
+        var Choice = Backbone.Model.extend({
 	    defaults:{
 		choice: "this is a choice.",
 		votes: 0,
@@ -34,7 +113,7 @@
 	    }
 	});
 
-	var AppRouter = Backbone.Router.extend({
+        var AppRouter = Backbone.Router.extend({
 	    routes: {
 		"/polls/:id": "getPoll",
 		"*actions": "defaultRoute"
@@ -50,11 +129,14 @@
 	    }
 	});
 
-	var app_router = new AppRouter();
-	Backbone.history.start();
-    });
+        var app_router = new AppRouter();
+        Backbone.history.start();
+
     </script>
-  </head>
-    <body>
+      <label>Question:</label>
+      <input id="poll_question" />
+      <label>Publicaton Date:</label>
+      <input id="poll_pub_date" />
+      <button id="add_poll">Add poll</button>
     </body>
 </html>
