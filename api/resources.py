@@ -8,7 +8,7 @@ class PollResource(ModelResource):
     class Meta:
         queryset = Poll.objects.all()
         resource_name = 'polls'
-        allowed_methods = ['get', 'post', 'delete']
+        allowed_methods = ['get', 'post', 'delete', 'update']
         excludes = ['resource_uri']
         authorization = Authorization()
         
@@ -18,4 +18,5 @@ class ChoiceResource(ModelResource):
     class Meta:
         queryset = Choice.objects.all()
         resource_name = 'choices'
-        allowed_methods = ['get', 'post', 'delete']
+        allowed_methods = ['get', 'post', 'delete', 'update']
+        authorization = Authorization()
