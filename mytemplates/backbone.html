@@ -157,17 +157,36 @@
 	    tagName: 'li',
 	    
 	    events: {
-		'click button.delete_choice':'remove'
+		'click button.delete_choice': 'remove',
+		'click button.vote_choice': 'vote'
+	    },
+
+	    initialize: function(){
+		_.bindAll(this, 'render', 'vote');
+		this.model.bind('change', this.render);
+		this.model.bind('remove', this.unrender);
 	    },
 	    
 	    render: function(){
-		$(this.el).append('<span>' + this.model.get('choice') + '</span> -- <span>Votes:' + this.model.get('votes') + '</span><button class=delete_choice>Delete</button>');
+		var buttons = '<button class="delete_choice">Delete</button><button class="vote_choice">Vote</button>';
+		$(this.el).html('<span>' + this.model.get('choice') + '</span> -- <span>Votes: ' + this.model.get('votes') + '</span>' + buttons);
 		return this;
+	    },
+
+	    unrender: function(){
+		$(this.el).remove()
 	    },
 
 	    remove: function(){
 		$(this.el).remove();
 		this.model.destroy();
+	    },
+
+	    vote: function(){
+		var votes = this.model.get('votes');
+		votes++;
+		this.model.set({ votes: votes });
+		this.model.save();
 	    }
 	});
 
