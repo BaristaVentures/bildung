@@ -9,12 +9,10 @@
     <body>
     <script type="text/javascript">
     
-        Backbone.emulateHTTP = true;
-        Backbone.emulateJSON = true;
-
+        //Backbone.emulateHTTP = true;
+        
         var PollsView = Backbone.View.extend({
 	    el: $('body'),
-
 	    events: {
 		'click button#add_poll':'addPoll'
 	    },
@@ -29,20 +27,16 @@
 	    },
 	    
 	    render: function(){
-
-		var self_view = this;
-		this.collection = new Polls();
+		var self = this;
 		this.collection.fetch({
 		    success: function(){
-			$(self_view.el).append("<ul></ul>");
-			_(self_view.collection.models).each(function(poll){
-			    self_view.appendPoll(poll);
-			}, self_view);
+			$(self.el).append("<ul id='polls'></ul>");
+			_(self.collection.models).each(function(poll){
+			    self.appendPoll(poll);
+			}, self);
 		    }
 		});
-		//$(this.el).append("<button id='add_poll'>Add Poll</button>");
 		
-
 	    },
 
 	    addPoll: function(){
@@ -61,7 +55,7 @@
 		var pollView = new PollView({
 		    model: poll
 		});
-		$('ul', this.el).append(pollView.render().el);
+		$('ul#polls', this.el).append(pollView.render().el);
 	    }
 
 	});
@@ -74,61 +68,119 @@
 	    },
 	    
 	    render: function(){
-		$(this.el).html('<span>' + this.model.get('question') + '</span><button class=delete_poll>Delete</button>');
+		$(this.el).append('<span>' + this.model.get('question') + '</span><button class=delete_poll>Delete</button>');
+		// var add_choice_button = "<button class='add_choice'>Add Choice</button>";
+		// var choice_choice = "<label>Choice:</label><input id='choice_choice'></input>";
+		// var choice_votes = "<label>Votes:</label><input id='choice_votes'></input>";
+		$(this.el).append("<div id='poll_" + this.model.get('id') + "_choices'></div>");
+		this.choices = new ChoicesView(this.model);
 		return this;
 	    },
 
 	    remove: function(){
 		$(this.el).remove();
-		alert(this.model.get('id'));
+		this.model.destroy();
 	    }
 	});
 
         var Polls = Backbone.Collection.extend({
 	    model: Poll,
 	    url: "/api/v1/polls/",
-
 	    parse: function(data){
 		return data.objects;
 	    }
-
 	});
 
         var Poll = Backbone.Model.extend({
-	    // defaults: {
-	    // 	question: "Is this a poll?",
-	    // 	pub_date: "2012-08-10T22:12:13+00:00"
-	    // },
 	    urlRoot: "/api/v1/polls/",
+	});
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        var ChoicesView = Backbone.View.extend({
 	    
-	    url: function(){
-	    	var base = this.urlRoot;
-	    	return base;
+	    events: {
+		'click button#add_choice':'addChoice'
 	    },
+	    
+	    initialize: function(poll){
+		_.bindAll(this, 'render', 'addChoice'); 
+		this.poll = "/api/v1/polls/" + poll.get('id') + "/";
+		this.el = 'div#poll_' + poll.get('id') + '_choices';
+		this.collection = new Choices({ poll: this.poll });
+		this.collection.bind('add', this.appendChoice);
+		this.render(poll);
+	    },
+	    
+	    render: function(poll){
+	
+		var self = this;
+		
+		this.collection.fetch({
+		    success: function(){
+			$(self.el).append("<ul></ul>");
+			_(self.collection.models).each(function(choice){
+			    if(choice.get('poll') == this.poll){
+				self.appendChoice(choice);
+				
+			    }
+			}, self);
+		    }
+		});
+		
+		
+	    },
+
+	    addChoice: function(){
+		//var choice_choice = $("#choice_choice").val();
+		//var choice_votes = $("#choice_votes").val();
+		var choice = new Choice();
+		choice.set({
+		    choice: choice_choice, 
+		    votes: choice_votes
+		});
+		choice.save();
+		this.collection.add();
+	    },
+
+	    appendChoice: function(choice){
+		var choiceView = new ChoiceView({
+		    model: choice
+		});
+		$('ul', this.el).append(choiceView.render().el);
+	    }
 
 	});
 
-        var pollsView = new PollsView();
-var polls = new Polls();
-// polls.fetch({
-//     success: function(){
-// 	alert(polls.models);
-//     }
-// });
-//alert(polls.at(0));
-//alert(models);
-//poll.save();
-//poll.destroy();
-//var poll = new Poll({ question: "Is it working now 2?", pub_date: "2012-08-10T22:12:13+00:00" });
+        var ChoiceView = Backbone.View.extend({
+	    tagName: 'li',
+	    
+	    events: {
+		'click button.delete_choice':'remove'
+	    },
+	    
+	    render: function(){
+		$(this.el).append('<span>' + this.model.get('choice') + '</span> -- <span>Votes:' + this.model.get('votes') + '</span><button class=delete_choice>Delete</button>');
+		return this;
+	    },
 
-//poll.save();
-
-        var Choice = Backbone.Model.extend({
-	    defaults:{
-		choice: "this is a choice.",
-		votes: 0,
-		poll: new Poll()
+	    remove: function(){
+		$(this.el).remove();
+		this.model.destroy();
 	    }
+	});
+
+        var Choices = Backbone.Collection.extend({
+            model: Choice,
+	    url: "/api/v1/choices/",
+	    parse: function(data){
+		return data.objects;
+	    }	    
+	});
+        
+        var Choice = Backbone.Model.extend({
+	    urlRoot: "/api/v1/choices/",
 	});
 
         var AppRouter = Backbone.Router.extend({
@@ -138,15 +190,16 @@ var polls = new Polls();
 	    },
 
 	    getPoll: function(id){
-		console.log(id);
+		//console.log(id);
 	    },
 
 	    defaultRoute: function(actions){
 		var polls = new Polls();
-		console.log(polls);
+		//console.log(polls);
 	    }
 	});
 
+        var pollsView = new PollsView();
         var app_router = new AppRouter();
         Backbone.history.start();
 
