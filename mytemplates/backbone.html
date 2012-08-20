@@ -101,7 +101,7 @@
         var ChoicesView = Backbone.View.extend({
 	    
 	    events: {
-		'click button#add_choice':'addChoice'
+		'click button':'addChoice'
 	    },
 	    
 	    initialize: function(poll){
@@ -112,27 +112,24 @@
 		this.collection.bind('add', this.appendChoice);
 		this.render(poll);
 	    },
-	    
+
 	    render: function(poll){
 	
 		var self = this;
-		
 		this.collection.fetch({
 		    success: function(){
 			$(self.el).append("<ul></ul>");
 			_(self.collection.models).each(function(choice){
 			    if(choice.get('poll') == this.poll){
 				self.appendChoice(choice);
-				
 			    }
 			}, self);
 		    }
 		});
-		
-		
 	    },
 
 	    addChoice: function(){
+		alert();
 		//var choice_choice = $("#choice_choice").val();
 		//var choice_votes = $("#choice_votes").val();
 		var choice = new Choice();
@@ -169,7 +166,7 @@
 	    
 	    render: function(){
 		var buttons = '<button class="delete_choice">Delete</button><button class="vote_choice">Vote</button>';
-		$(this.el).html('<span>' + this.model.get('choice') + '</span> -- <span>Votes: ' + this.model.get('votes') + '</span>' + buttons);
+		$(this.el).html('<span>' + this.model.get('choice') + '</span>  <span>Votes: ' + this.model.get('votes') + '</span>' + buttons);
 		return this;
 	    },
 
