@@ -10,6 +10,7 @@ class PollResource(ModelResource):
         resource_name = 'polls'
         # authorization= Authorization()
         # allowed_methods = ['get']
+        # list_allowed_methods = ['get', 'post']
 
 class ChoiceResource(ModelResource):
     poll = fields.ForeignKey(PollResource, 'poll')

@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from polls.models import Choice, Poll
+from django.views.generic.base import TemplateView
 
 # def index(request):
 #     latest_poll_list = Poll.objects.all().order_by('-pub_date')[:5]
@@ -16,6 +17,8 @@ from polls.models import Choice, Poll
 # def results(request, poll_id):
 #     p = get_object_or_404(Poll, pk=poll_id)
 #     return render_to_response('polls/results.html', {'poll': p})
+class IndexView(TemplateView):
+    template_name = 'polls/index.html'
 
 def vote(request, poll_id):
     p = get_object_or_404(Poll, pk=poll_id)
