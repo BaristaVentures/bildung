@@ -4,19 +4,23 @@
     <script src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
     <script src="http://ajax.cdnjs.com/ajax/libs/underscore.js/1.1.6/underscore-min.js"></script>
     <script src="http://ajax.cdnjs.com/ajax/libs/backbone.js/0.5/backbone-min.js"></script>
-    
   </head>
     <body>
-    <script type="text/javascript">
-    
+      <script type="text/coffeescript">
+        $ ->
+                alert("Hello #{ message }")
+      </script>
+      <script type="text/javascript">
+
+
         //Backbone.emulateHTTP = true;
-        
+
         var PollsView = Backbone.View.extend({
 	    el: $('body'),
 	    events: {
 		'click button#add_poll':'addPoll'
 	    },
-	    
+
 	    initialize: function(){
 		//_.bindAll(this, 'render', 'addPoll');
 
@@ -25,7 +29,7 @@
 
 		this.render();
 	    },
-	    
+
 	    render: function(){
 		var self = this;
 		this.collection.fetch({
@@ -36,7 +40,7 @@
 			}, self);
 		    }
 		});
-		
+
 	    },
 
 	    addPoll: function(){
@@ -44,7 +48,7 @@
 		var poll_pub_date = $("#poll_pub_date").val();
 		var poll = new Poll();
 		poll.set({
-		    question: poll_question, 
+		    question: poll_question,
 		    pub_date: poll_pub_date
 		});
 		poll.save();
@@ -62,11 +66,11 @@
 
         var PollView = Backbone.View.extend({
 	    tagName: 'li',
-	    
+
 	    events: {
 		'click button.delete_poll':'remove'
 	    },
-	    
+
 	    render: function(){
 		$(this.el).append('<span>' + this.model.get('question') + '</span><button class=delete_poll>Delete</button>');
 		// var add_choice_button = "<button class='add_choice'>Add Choice</button>";
@@ -99,13 +103,13 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         var ChoicesView = Backbone.View.extend({
-	    
+
 	    events: {
 		'click button':'addChoice'
 	    },
-	    
+
 	    initialize: function(poll){
-		_.bindAll(this, 'render', 'addChoice'); 
+		_.bindAll(this, 'render', 'addChoice');
 		this.poll = "/api/v1/polls/" + poll.get('id') + "/";
 		this.el = 'div#poll_' + poll.get('id') + '_choices';
 		this.collection = new Choices({ poll: this.poll });
@@ -114,7 +118,7 @@
 	    },
 
 	    render: function(poll){
-	
+
 		var self = this;
 		this.collection.fetch({
 		    success: function(){
@@ -134,7 +138,7 @@
 		//var choice_votes = $("#choice_votes").val();
 		var choice = new Choice();
 		choice.set({
-		    choice: choice_choice, 
+		    choice: choice_choice,
 		    votes: choice_votes
 		});
 		choice.save();
@@ -152,7 +156,7 @@
 
         var ChoiceView = Backbone.View.extend({
 	    tagName: 'li',
-	    
+
 	    events: {
 		'click button.delete_choice': 'remove',
 		'click button.vote_choice': 'vote'
@@ -163,7 +167,7 @@
 		this.model.bind('change', this.render);
 		this.model.bind('remove', this.unrender);
 	    },
-	    
+
 	    render: function(){
 		var buttons = '<button class="delete_choice">Delete</button><button class="vote_choice">Vote</button>';
 		$(this.el).html('<span>' + this.model.get('choice') + '</span>  <span>Votes: ' + this.model.get('votes') + '</span>' + buttons);
@@ -192,9 +196,9 @@
 	    url: "/api/v1/choices/",
 	    parse: function(data){
 		return data.objects;
-	    }	    
+	    }
 	});
-        
+
         var Choice = Backbone.Model.extend({
 	    urlRoot: "/api/v1/choices/",
 	});
