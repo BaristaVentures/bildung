@@ -6,6 +6,6 @@ class Command(NoArgsCommand):
 
     def handle(self, **options):
         path = "mysite/web/resources/web"
-        f = os.popen("coffee --join " + path +"/js/app.js --compile " + path + "/coffee/*.coffee")
+        f = os.popen("coffee --join %s/js/app.js --compile %s/coffee/*.coffee" % (path, path))
         for i in f.readlines():
             print i
