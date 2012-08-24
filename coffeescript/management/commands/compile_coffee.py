@@ -5,6 +5,7 @@ class Command(NoArgsCommand):
     help = 'Compiles coffeescript into javascript'
 
     def handle(self, **options):
-        f = os.popen("coffee --join static/js/app.js --compile static/coffee/*.coffee")
+        path = "mysite/web/resources/web"
+        f = os.popen("coffee --join " + path +"/js/app.js --compile " + path + "/coffee/*.coffee")
         for i in f.readlines():
             print i
