@@ -3,9 +3,13 @@ jQuery ->
     class PollsView extends Backbone.View
         el: $('div#polls')
 
+        events:
+            'click button#add_poll': 'addPoll'
+
         initialize: ->
             _.bindAll @
             @collection = new Polls()
+            @collection.bind('add', @appendPoll)
             @render()
 
         render: ->
@@ -14,14 +18,36 @@ jQuery ->
                 success: ->
                     for poll in self.collection.models
                         self.appendPoll(poll)
+
                 error: ->
                    alert("An error occurred while attempting to fetch Polls Collection.")
+
+        addPoll: ->
+            poll_question = $("#poll_question").val();
+            poll_pub_date = $("#poll_pub_date").val();
+            poll = new Poll();
+
+            poll.set
+                question: poll_question,
+                pub_date: poll_pub_date,
+
+            self = @
+            poll.save {},
+                success: ->
+                    self.collection.add(poll)
+                error: (model, response) ->
+                    error =
+                        """
+                        There was an error trying to save a poll.
+                        Response: #{ response.responseText }
+                        """
+                    alert(error)
 
         appendPoll: (poll) ->
             pollView = new PollView({
                 model: poll
             })
-            $('ul', @el).append(pollView.render().el)
+            $('ul#polls', @el).append(pollView.render().el)
 
 
     class PollView extends Backbone.View
@@ -44,7 +70,7 @@ jQuery ->
             self = @
             @collection.fetch
                 success: ->
-                    $(self.el).append("<ul></ul>")
+                    $(self.el).append("<ul id='choices'></ul>")
                     for choice in self.collection.models
                         if choice.get('poll') is self.poll
                             self.appendChoice(choice)
@@ -55,7 +81,7 @@ jQuery ->
             choiceView = new ChoiceView({
                 model: choice
             })
-            $('ul', @el).append(choiceView.render().el)
+            $('ul#choices', @el).append(choiceView.render().el)
 
     class ChoiceView extends Backbone.View
         tagName: 'li'

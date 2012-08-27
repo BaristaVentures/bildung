@@ -84,9 +84,14 @@
 
       PollsView.prototype.el = $('div#polls');
 
+      PollsView.prototype.events = {
+        'click button#add_poll': 'addPoll'
+      };
+
       PollsView.prototype.initialize = function() {
         _.bindAll(this);
         this.collection = new Polls();
+        this.collection.bind('add', this.appendPoll);
         return this.render();
       };
 
@@ -110,12 +115,34 @@
         });
       };
 
+      PollsView.prototype.addPoll = function() {
+        var poll, poll_pub_date, poll_question, self;
+        poll_question = $("#poll_question").val();
+        poll_pub_date = $("#poll_pub_date").val();
+        poll = new Poll();
+        poll.set({
+          question: poll_question,
+          pub_date: poll_pub_date
+        });
+        self = this;
+        return poll.save({}, {
+          success: function() {
+            return self.collection.add(poll);
+          },
+          error: function(model, response) {
+            var error;
+            error = "There was an error trying to save a poll.\nResponse: " + response.responseText;
+            return alert(error);
+          }
+        });
+      };
+
       PollsView.prototype.appendPoll = function(poll) {
         var pollView;
         pollView = new PollView({
           model: poll
         });
-        return $('ul', this.el).append(pollView.render().el);
+        return $('ul#polls', this.el).append(pollView.render().el);
       };
 
       return PollsView;
@@ -164,7 +191,7 @@
         return this.collection.fetch({
           success: function() {
             var choice, _i, _len, _ref, _results;
-            $(self.el).append("<ul></ul>");
+            $(self.el).append("<ul id='choices'></ul>");
             _ref = self.collection.models;
             _results = [];
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -188,7 +215,7 @@
         choiceView = new ChoiceView({
           model: choice
         });
-        return $('ul', this.el).append(choiceView.render().el);
+        return $('ul#choices', this.el).append(choiceView.render().el);
       };
 
       return ChoicesView;
