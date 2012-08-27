@@ -12,7 +12,6 @@ jQuery ->
             self = @
             @collection.fetch
                 success: ->
-                    $(self.el).append("<ul></ul>")
                     for poll in self.collection.models
                         self.appendPoll(poll)
                 error: ->
@@ -30,7 +29,39 @@ jQuery ->
 
         render: ->
             $(@el).append("<span>#{ @model.get 'question' }</span>")
+            $(@el).append("<div id='poll_#{ @model.get('id') }_choices'></div>")
+            @el.choices = new ChoicesView(@model)
+            return @
 
+    class ChoicesView extends Backbone.View
+        initialize: (poll) ->
+            @poll = "/api/v1/polls/#{ poll.get('id') }/"
+            @el = "div#poll_#{ poll.get('id') }_choices"
+            @collection = new Choices({ poll: @poll })
+            @render(poll);
+
+        render: (poll) ->
+            self = @
+            @collection.fetch
+                success: ->
+                    $(self.el).append("<ul></ul>")
+                    for choice in self.collection.models
+                        if choice.get('poll') is self.poll
+                            self.appendChoice(choice)
+                error: ->
+                    alert("An error occurred while attempting to fetch Choices Collection.");
+
+        appendChoice: (choice) ->
+            choiceView = new ChoiceView({
+                model: choice
+            })
+            $('ul', @el).append(choiceView.render().el)
+
+    class ChoiceView extends Backbone.View
+        tagName: 'li'
+
+        render: ->
+            $(@el).html("<span>#{ @model.get('choice') }</span>")
             return @
 
     new PollsView()

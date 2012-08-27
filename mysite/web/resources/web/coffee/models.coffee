@@ -20,4 +20,4 @@ class Choices extends Backbone.Collection
     model: Choice,
     url: '/api/v1/choices/',
     parse: (data) ->
-        data
+        return data.objects

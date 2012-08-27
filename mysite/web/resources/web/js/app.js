@@ -65,7 +65,7 @@
     Choices.prototype.url = '/api/v1/choices/';
 
     Choices.prototype.parse = function(data) {
-      return data;
+      return data.objects;
     };
 
     return Choices;
@@ -73,7 +73,7 @@
   })(Backbone.Collection);
 
   jQuery(function() {
-    var PollView, PollsView;
+    var ChoiceView, ChoicesView, PollView, PollsView;
     PollsView = (function(_super) {
 
       __extends(PollsView, _super);
@@ -96,7 +96,6 @@
         return this.collection.fetch({
           success: function() {
             var poll, _i, _len, _ref, _results;
-            $(self.el).append("<ul></ul>");
             _ref = self.collection.models;
             _results = [];
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -134,10 +133,83 @@
 
       PollView.prototype.render = function() {
         $(this.el).append("<span>" + (this.model.get('question')) + "</span>");
+        $(this.el).append("<div id='poll_" + (this.model.get('id')) + "_choices'></div>");
+        this.el.choices = new ChoicesView(this.model);
         return this;
       };
 
       return PollView;
+
+    })(Backbone.View);
+    ChoicesView = (function(_super) {
+
+      __extends(ChoicesView, _super);
+
+      function ChoicesView() {
+        return ChoicesView.__super__.constructor.apply(this, arguments);
+      }
+
+      ChoicesView.prototype.initialize = function(poll) {
+        this.poll = "/api/v1/polls/" + (poll.get('id')) + "/";
+        this.el = "div#poll_" + (poll.get('id')) + "_choices";
+        this.collection = new Choices({
+          poll: this.poll
+        });
+        return this.render(poll);
+      };
+
+      ChoicesView.prototype.render = function(poll) {
+        var self;
+        self = this;
+        return this.collection.fetch({
+          success: function() {
+            var choice, _i, _len, _ref, _results;
+            $(self.el).append("<ul></ul>");
+            _ref = self.collection.models;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              choice = _ref[_i];
+              if (choice.get('poll') === self.poll) {
+                _results.push(self.appendChoice(choice));
+              } else {
+                _results.push(void 0);
+              }
+            }
+            return _results;
+          },
+          error: function() {
+            return alert("An error occurred while attempting to fetch Choices Collection.");
+          }
+        });
+      };
+
+      ChoicesView.prototype.appendChoice = function(choice) {
+        var choiceView;
+        choiceView = new ChoiceView({
+          model: choice
+        });
+        return $('ul', this.el).append(choiceView.render().el);
+      };
+
+      return ChoicesView;
+
+    })(Backbone.View);
+    ChoiceView = (function(_super) {
+
+      __extends(ChoiceView, _super);
+
+      function ChoiceView() {
+        return ChoiceView.__super__.constructor.apply(this, arguments);
+      }
+
+      ChoiceView.prototype.tagName = 'li';
+
+      ChoiceView.prototype.render = function() {
+        $(this.el).html("<span>" + (this.model.get('choice')) + "</span>");
+        return this;
+      };
+
+      return ChoiceView;
 
     })(Backbone.View);
     return new PollsView();
