@@ -1,5 +1,14 @@
 /*
  **************************************************************
+ * This section controls the poll model.
+ **************************************************************
+ */
+var Poll = Backbone.Model.extend({
+    urlRoot: "/api/v1/polls/",
+});
+
+/*
+ **************************************************************
  * This section controls the polls model.
  **************************************************************
  */
@@ -13,13 +22,12 @@ var Polls = Backbone.Collection.extend({
 
 /*
  **************************************************************
- * This section controls the poll model.
+ * This section controls the choice model.
  **************************************************************
  */
-var Poll = Backbone.Model.extend({
-    urlRoot: "/api/v1/polls/",
+var Choice = Backbone.Model.extend({
+    urlRoot: "/api/v1/choices/",
 });
-
 
 /*
  **************************************************************
@@ -32,13 +40,4 @@ var Choices = Backbone.Collection.extend({
     parse: function(data){
 	return data.objects;
     }
-});
-
-/*
- **************************************************************
- * This section controls the choice model.
- **************************************************************
- */
-var Choice = Backbone.Model.extend({
-    urlRoot: "/api/v1/choices/",
 });
