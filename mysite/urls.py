@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.conf.urls.defaults import *
 from tastypie.api import Api
 from api.resources import PollResource, ChoiceResource
-from mysite.views import BackbonePage
+from mysite.views import BackbonePage, CoffeeScriptPage
 from django.conf import settings
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
@@ -20,6 +20,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/', include(v1_api.urls)),
     url(r'^backbone/$', BackbonePage.as_view()),
+    url(r'^coffeescript/$', CoffeeScriptPage.as_view()),
 )
 
 urlpatterns += patterns('',
