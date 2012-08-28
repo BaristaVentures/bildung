@@ -12,4 +12,5 @@
     <label for="choice{{ forloop.counter }}">{{ choice.choice }}</label><br />
 {% endfor %}
 <input type="submit" value="Vote" />
+<a href="/polls/{{ poll.id }}/comments">Comments</a>
 </form>

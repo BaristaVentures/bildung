@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <title>Comments</title>
+    <script type="text/javascript" src="/media/web/js/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="/media/web/js/underscore-min.js"></script>
+    <script type="text/javascript" src="/media/web/js/backbone-min.js"></script>
+    <script type="text/javascript" src="/media/web/js/comments.js"></script>
+    
+  </head>
+  <body>
+    <h1>{{ poll.question }}</h1>
+
+    <h2>Comments about this question.</h2>
+
+    {% if error_message%}
+    <p><strong>{{ error_message }}</strong></p>
+    {% endif%}
+
+    <div id="comments">
+      <script type="text/template" id="comments_template">
+	<hr>
+	<p>Author: <%= comment.get('author') %></p>
+	<p>Comment: <%= comment.get('comment') %></p>
+	<p>Published on: <%= comment.get('pub_date') %></p>
+	<hr>
+      </script>
+    </div>
+
+    <label>Author</label><br />
+    <input id="author"></input><br/>
+    <label>Comment</label><br />
+    <textarea id="comment" rows="15" cols="30"></textarea><br />
+    <button id="comment_button">Comment</button>
+  </body>
+</html>
