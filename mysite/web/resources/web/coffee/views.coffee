@@ -53,11 +53,23 @@ jQuery ->
     class PollView extends Backbone.View
         tagName: 'li'
 
+        events:
+            'click button.delete_poll': 'remove'
+
         render: ->
             $(@el).append("<span>#{ @model.get 'question' }</span>")
+            $(@el).append("&nbsp; <button class='delete_poll'>Delete</button>")
             $(@el).append("<div id='poll_#{ @model.get('id') }_choices'></div>")
             @el.choices = new ChoicesView(@model)
             return @
+
+        remove: ->
+            self = @
+            @model.destroy
+                success: ->
+                    $(self.el).remove()
+                error: ->
+                    alert("There was an error trying to delete the poll.")
 
     class ChoicesView extends Backbone.View
 

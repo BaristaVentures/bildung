@@ -72,9 +72,6 @@
 	
 	render: function(){
 	    $(this.el).append('<span>' + this.model.get('question') + '</span><button class=delete_poll>Delete</button>');
-	    // var add_choice_button = "<button class='add_choice'>Add Choice</button>";
-	    // var choice_choice = "<label>Choice:</label><input id='choice_choice'></input>";
-	    // var choice_votes = "<label>Votes:</label><input id='choice_votes'></input>";
 	    $(this.el).append("<div id='poll_" + this.model.get('id') + "_choices'></div>");
 	    this.choices = new ChoicesView(this.model);
 	    return this;

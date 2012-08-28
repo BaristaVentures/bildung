@@ -158,11 +158,29 @@
 
       PollView.prototype.tagName = 'li';
 
+      PollView.prototype.events = {
+        'click button.delete_poll': 'remove'
+      };
+
       PollView.prototype.render = function() {
         $(this.el).append("<span>" + (this.model.get('question')) + "</span>");
+        $(this.el).append("&nbsp; <button class='delete_poll'>Delete</button>");
         $(this.el).append("<div id='poll_" + (this.model.get('id')) + "_choices'></div>");
         this.el.choices = new ChoicesView(this.model);
         return this;
+      };
+
+      PollView.prototype.remove = function() {
+        var self;
+        self = this;
+        return this.model.destroy({
+          success: function() {
+            return $(self.el).remove();
+          },
+          error: function() {
+            return alert("There was an error trying to delete the poll.");
+          }
+        });
       };
 
       return PollView;
