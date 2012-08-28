@@ -24,3 +24,20 @@ class Choice(models.Model):
 
     def __unicode__(self):
         return self.choice
+
+class Comment(models.Model):
+    poll = models.ForeignKey(Poll)
+    author = models.CharField(max_length=20)
+    comment = models.TextField(max_length=1000)
+    pub_date = models.DateTimeField('date published')
+    
+    def __unicode__(self):
+        comment = {
+            'Author': self.author,
+            'Comment': self.comment,
+            'Pub Date': self.pub_date,
+            'Poll': self.poll,
+        }
+
+        return str(comment)
+        #return u'Author: %s, Comment: %s, Pub Date: %s, Poll: %s' % (self.author, self.comment, self.pub_date, self.poll)
