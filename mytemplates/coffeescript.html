@@ -18,6 +18,15 @@
       <ul id="polls"></ul>
     </div>
 
+    <script type="text/template" id="choices_template">
+      <label>Choice</label>
+      <input id="choice_name_poll_<%= poll_id %>"></input>
+      <label>Votes</label>
+      <input id="choice_votes_poll_<%= poll_id %>"></input>
+      <button id="add_choice_poll_<%= poll_id %>" >Add Choice</button>
+      <ul id='choices'></ul>
+    </script>
+
 
   </body>
 </html>

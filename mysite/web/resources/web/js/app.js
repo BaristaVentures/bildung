@@ -177,11 +177,13 @@
       }
 
       ChoicesView.prototype.initialize = function(poll) {
+        _.bindAll(this);
         this.poll = "/api/v1/polls/" + (poll.get('id')) + "/";
         this.el = "div#poll_" + (poll.get('id')) + "_choices";
         this.collection = new Choices({
           poll: this.poll
         });
+        this.collection.bind('add', this.appendChoice);
         return this.render(poll);
       };
 
@@ -191,7 +193,7 @@
         return this.collection.fetch({
           success: function() {
             var choice, _i, _len, _ref, _results;
-            $(self.el).append("<ul id='choices'></ul>");
+            self.renderTemplate(poll);
             _ref = self.collection.models;
             _results = [];
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -210,12 +212,48 @@
         });
       };
 
+      ChoicesView.prototype.renderTemplate = function(poll) {
+        var self, template, variables;
+        variables = {
+          poll_id: poll.get('id')
+        };
+        template = _.template($("#choices_template").html(), variables);
+        $(this.el).append(template);
+        self = this;
+        return $("button#add_choice_poll_" + poll.id).click(function() {
+          return self.addChoice(poll);
+        });
+      };
+
       ChoicesView.prototype.appendChoice = function(choice) {
         var choiceView;
         choiceView = new ChoiceView({
           model: choice
         });
         return $('ul#choices', this.el).append(choiceView.render().el);
+      };
+
+      ChoicesView.prototype.addChoice = function(poll) {
+        var choice, choice_choice, choice_votes, self;
+        choice_choice = $("#choice_name_poll_" + (poll.get('id'))).val();
+        choice_votes = $("#choice_votes_poll_" + (poll.get('id'))).val();
+        choice = new Choice();
+        choice.set({
+          choice: choice_choice,
+          votes: parseInt(choice_votes),
+          poll: poll.get('resource_uri')
+        });
+        self = this;
+        return choice.save({}, {
+          success: function() {
+            return self.collection.add(choice);
+          },
+          error: function(model, response) {
+            var error;
+            error = "There was an error trying to save a choice.\nResponse: " + response.responseText;
+            return alert(error);
+          }
+        });
       };
 
       return ChoicesView;

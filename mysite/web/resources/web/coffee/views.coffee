@@ -60,28 +60,61 @@ jQuery ->
             return @
 
     class ChoicesView extends Backbone.View
+
         initialize: (poll) ->
+            _.bindAll @
             @poll = "/api/v1/polls/#{ poll.get('id') }/"
             @el = "div#poll_#{ poll.get('id') }_choices"
             @collection = new Choices({ poll: @poll })
+            @collection.bind('add', @appendChoice)
             @render(poll);
 
         render: (poll) ->
             self = @
             @collection.fetch
                 success: ->
-                    $(self.el).append("<ul id='choices'></ul>")
+                    self.renderTemplate(poll)
                     for choice in self.collection.models
                         if choice.get('poll') is self.poll
                             self.appendChoice(choice)
                 error: ->
-                    alert("An error occurred while attempting to fetch Choices Collection.");
+                    alert("An error occurred while attempting to fetch Choices Collection.")
+
+        renderTemplate: (poll) ->
+            variables = { poll_id: poll.get('id') }
+            template = _.template($("#choices_template").html(), variables)
+            $(@el).append(template)
+
+            self = @
+            $("button#add_choice_poll_#{ poll.id }").click ->
+                self.addChoice(poll)
 
         appendChoice: (choice) ->
             choiceView = new ChoiceView({
                 model: choice
             })
             $('ul#choices', @el).append(choiceView.render().el)
+
+        addChoice: (poll) ->
+            choice_choice = $("#choice_name_poll_#{ poll.get('id') }").val()
+            choice_votes = $("#choice_votes_poll_#{ poll.get('id') }").val()
+            choice = new Choice()
+            choice.set
+                choice: choice_choice,
+                votes: parseInt(choice_votes),
+                poll: poll.get('resource_uri')
+
+            self = @
+            choice.save {},
+                success: ->
+                    self.collection.add(choice)
+                error: (model, response) ->
+                    error =
+                        """
+                        There was an error trying to save a choice.
+                        Response: #{ response.responseText }
+                        """
+                    alert(error)
 
     class ChoiceView extends Backbone.View
         tagName: 'li'
