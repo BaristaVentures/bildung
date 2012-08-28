@@ -31,6 +31,7 @@
     Polls.prototype.url = "/api/v1/polls/";
 
     Polls.prototype.parse = function(data) {
+      console.log(data);
       return data.objects;
     };
 
@@ -125,9 +126,10 @@
           pub_date: poll_pub_date
         });
         self = this;
-        return poll.save({}, {
-          success: function() {
-            return self.collection.add(poll);
+        poll.save({}, {
+          success: function(model) {
+            console.log(model);
+            return self.collection.add(model);
           },
           error: function(model, response) {
             var error;
@@ -135,6 +137,7 @@
             return alert(error);
           }
         });
+        return console.log(poll);
       };
 
       PollsView.prototype.appendPoll = function(poll) {
@@ -268,7 +271,8 @@
           },
           error: function(model, response) {
             var error;
-            error = "There was an error trying to save a choice.\nResponse: " + response.responseText;
+            console.log(response);
+            error = "There was an error trying to save a choice.\nResponse: " + response.responseText.error_message;
             return alert(error);
           }
         });
@@ -287,9 +291,54 @@
 
       ChoiceView.prototype.tagName = 'li';
 
+      ChoiceView.prototype.events = {
+        'click button.delete_choice': 'remove',
+        'click button.vote_choice': 'vote'
+      };
+
+      ChoiceView.prototype.initialize = function() {
+        _.bindAll(this);
+        return this.model.bind('change', this.render);
+      };
+
       ChoiceView.prototype.render = function() {
-        $(this.el).html("<span>" + (this.model.get('choice')) + "</span>");
+        var choice_name, choice_votes, delete_button, vote_button;
+        choice_name = "<span>" + (this.model.get('choice')) + "</span>";
+        choice_votes = "&nbsp;<span>Votes: " + (this.model.get('votes')) + "</span>";
+        vote_button = "&nbsp; <button class='vote_choice'>Vote</button>";
+        delete_button = "&nbsp; <button class='delete_choice'>Delete</button>";
+        $(this.el).html(choice_name + choice_votes + vote_button + delete_button);
         return this;
+      };
+
+      ChoiceView.prototype.remove = function() {
+        var self;
+        self = this;
+        return this.model.destroy({
+          success: function() {
+            return $(self.el).remove();
+          },
+          error: function() {
+            return alert("There was an error trying to delete the choice.");
+          }
+        });
+      };
+
+      ChoiceView.prototype.vote = function() {
+        var votes;
+        votes = this.model.get('votes');
+        votes++;
+        this.model.set({
+          votes: votes
+        });
+        return this.model.save({
+          success: function() {
+            return console.log("vote");
+          },
+          error: function() {
+            return alert("There was an error while trying to vote for a choice.");
+          }
+        });
       };
 
       return ChoiceView;

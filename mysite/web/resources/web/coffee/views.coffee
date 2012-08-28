@@ -1,5 +1,7 @@
 # These are the Coffee Script client views.
 jQuery ->
+
+
     class PollsView extends Backbone.View
         el: $('div#polls')
 
@@ -23,18 +25,18 @@ jQuery ->
                    alert("An error occurred while attempting to fetch Polls Collection.")
 
         addPoll: ->
-            poll_question = $("#poll_question").val();
-            poll_pub_date = $("#poll_pub_date").val();
+            poll_question = $("#poll_question").val()
+            poll_pub_date = $("#poll_pub_date").val()
             poll = new Poll();
 
             poll.set
                 question: poll_question,
-                pub_date: poll_pub_date,
+                pub_date: poll_pub_date
 
             self = @
             poll.save {},
-                success: ->
-                    self.collection.add(poll)
+                success: (model) ->
+                    self.collection.add(model)
                 error: (model, response) ->
                     error =
                         """
@@ -121,18 +123,51 @@ jQuery ->
                 success: ->
                     self.collection.add(choice)
                 error: (model, response) ->
+                    console.log response
                     error =
                         """
                         There was an error trying to save a choice.
-                        Response: #{ response.responseText }
+                        Response: #{ response.responseText.error_message }
                         """
                     alert(error)
 
     class ChoiceView extends Backbone.View
         tagName: 'li'
 
+        events:
+            'click button.delete_choice': 'remove',
+            'click button.vote_choice': 'vote'
+
+        initialize: ->
+            _.bindAll @
+            @model.bind('change', @render)
+
         render: ->
-            $(@el).html("<span>#{ @model.get('choice') }</span>")
+            choice_name = "<span>#{ @model.get('choice') }</span>"
+            choice_votes = "&nbsp;<span>Votes: #{ @model.get('votes') }</span>"
+            vote_button = "&nbsp; <button class='vote_choice'>Vote</button>"
+            delete_button = "&nbsp; <button class='delete_choice'>Delete</button>"
+            $(@el).html(choice_name + choice_votes + vote_button + delete_button)
             return @
+
+        remove: ->
+            self = @
+            @model.destroy
+                success: ->
+                    $(self.el).remove()
+                error: ->
+                    alert("There was an error trying to delete the choice.")
+
+        vote: ->
+            votes = @model.get('votes')
+            votes++
+            @model.set
+                votes: votes
+            @model.save
+                success: ->
+                    console.log("vote")
+                error: ->
+                    alert("There was an error while trying to vote for a choice.")
+
 
     new PollsView()
