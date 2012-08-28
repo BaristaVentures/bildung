@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.conf.urls.defaults import *
 from tastypie.api import Api
-from api.resources import PollResource, ChoiceResource
+from api.resources import PollResource, ChoiceResource, CommentResource
 from mysite.views import BackbonePage, CoffeeScriptPage
 from django.conf import settings
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -9,6 +9,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 v1_api = Api(api_name='v1')
 v1_api.register(PollResource())
 v1_api.register(ChoiceResource())
+v1_api.register(CommentResource())
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
