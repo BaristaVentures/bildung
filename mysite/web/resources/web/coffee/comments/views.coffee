@@ -16,10 +16,10 @@ jQuery ->
             @readComments()
 
         appendComment: (comment) ->
-            commentView = new CommentView({
+            commentView = new CommentView
                 model: comment
-            })
-            $(@el).append(commentView.render().el)
+
+            $('ul#comment_list', @el).append(commentView.render().el)
 
         createComment: ->
             comment_author = $('input#author').val()
@@ -33,14 +33,11 @@ jQuery ->
                 pub_date: new Date(),
                 poll: comment_poll
 
-            self = @
-            comment.save {},
-                success: ->
-                    self.collection.add(comment)
-                    $('input#author').val('')
-                    $('textarea#comment').val('')
-                error: ->
-                    alert("An error occurred while attempting to create a Comment.")
+            comment.save()
+
+            $('input#author').val('')
+            $('textarea#comment').val('')
+            @collection.add(comment)
 
         readComments: ->
             self = @
@@ -52,18 +49,41 @@ jQuery ->
                     alert("An error occurred while attempting to fetch Comments Collection.")
 
 
-
     class CommentView extends Backbone.View
+        tagName: 'li'
+
+        events:
+             "click button.delete_comment": "deleteComment"
+             "click button.edit_comment": "editComment"
+
         initialize: ->
             _.bindAll @
+
+            @model.bind('remove', @unrender)
 
         render: ->
             @renderTemplate()
             return @
 
+        unrender: ->
+            $(@el).remove()
+
         renderTemplate: ->
             variables = { comment: @model }
             template = _.template($("script#comments_template").html(), variables)
-            $('div#comments_items').append(template)
+            $(@el).html(template)
+
+        deleteComment: ->
+            alert("Destroy")
+            @model.destroy()
+
+        editComment: ->
+            $('input#author').val(@model.get('author'))
+            $('textarea#comment').val(@model.get('comment'))
+            $('input#author').focus()
+
+        updateComment: ->
+            comment_author = $('input#author').val()
+            comment_comment = $('textarea#comment').val()
 
     new CommentsView()

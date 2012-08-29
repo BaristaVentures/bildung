@@ -70,11 +70,11 @@
         commentView = new CommentView({
           model: comment
         });
-        return $(this.el).append(commentView.render().el);
+        return $('ul#comment_list', this.el).append(commentView.render().el);
       };
 
       CommentsView.prototype.createComment = function() {
-        var comment, comment_author, comment_comment, comment_poll, self;
+        var comment, comment_author, comment_comment, comment_poll;
         comment_author = $('input#author').val();
         comment_comment = $('textarea#comment').val();
         comment_poll = "/api/v1/polls/" + ($('input#poll').val()) + "/";
@@ -85,17 +85,10 @@
           pub_date: new Date(),
           poll: comment_poll
         });
-        self = this;
-        return comment.save({}, {
-          success: function() {
-            self.collection.add(comment);
-            $('input#author').val('');
-            return $('textarea#comment').val('');
-          },
-          error: function() {
-            return alert("An error occurred while attempting to create a Comment.");
-          }
-        });
+        comment.save();
+        $('input#author').val('');
+        $('textarea#comment').val('');
+        return this.collection.add(comment);
       };
 
       CommentsView.prototype.readComments = function() {
@@ -129,13 +122,25 @@
         return CommentView.__super__.constructor.apply(this, arguments);
       }
 
+      CommentView.prototype.tagName = 'li';
+
+      CommentView.prototype.events = {
+        "click button.delete_comment": "deleteComment",
+        "click button.edit_comment": "editComment"
+      };
+
       CommentView.prototype.initialize = function() {
-        return _.bindAll(this);
+        _.bindAll(this);
+        return this.model.bind('remove', this.unrender);
       };
 
       CommentView.prototype.render = function() {
         this.renderTemplate();
         return this;
+      };
+
+      CommentView.prototype.unrender = function() {
+        return $(this.el).remove();
       };
 
       CommentView.prototype.renderTemplate = function() {
@@ -144,7 +149,24 @@
           comment: this.model
         };
         template = _.template($("script#comments_template").html(), variables);
-        return $('div#comments_items').append(template);
+        return $(this.el).html(template);
+      };
+
+      CommentView.prototype.deleteComment = function() {
+        alert("Destroy");
+        return this.model.destroy();
+      };
+
+      CommentView.prototype.editComment = function() {
+        $('input#author').val(this.model.get('author'));
+        $('textarea#comment').val(this.model.get('comment'));
+        return $('input#author').focus();
+      };
+
+      CommentView.prototype.updateComment = function() {
+        var comment_author, comment_comment;
+        comment_author = $('input#author').val();
+        return comment_comment = $('textarea#comment').val();
       };
 
       return CommentView;

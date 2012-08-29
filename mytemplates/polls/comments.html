@@ -18,14 +18,8 @@
     {% endif%}
 
     <div id="comments">
-      <div id="comments_items">
-	<script type="text/template" id="comments_template">
-	  <p>Author: <%= comment.get('author') %></p>
-	  <p>Comment: <%= comment.get('comment') %></p>
-	  <p>Published on: <%= comment.get('pub_date') %></p>
-	  <hr>
-        </script>
-      </div>
+   
+      <ul id="comment_list"></ul>
 
       <label>Author</label><br />
       <input id="author"></input><br/>
@@ -33,7 +27,19 @@
       <textarea id="comment" rows="15" cols="30"></textarea><br />
       <input id="poll" type="hidden" value="{{ poll.id }}" />
       <button id="create_comment">Comment</button>
+   
+       <script type="text/template" id="comments_template">
+	 <p>Author: <%= comment.get('author') %></p>
+	 <p>Comment: <%= comment.get('comment') %></p>
+	 <p>Published on: <%= comment.get('pub_date') %></p>
+	 <button class="edit_comment">Edit</button>
+	 <button class="delete_comment">Delete</button>
+	 <hr>
+       </script>
+      
     </div>
     
+   
+
   </body>
 </html>
