@@ -40,4 +40,3 @@ class Comment(models.Model):
         }
 
         return str(comment)
-        #return u'Author: %s, Comment: %s, Pub Date: %s, Poll: %s' % (self.author, self.comment, self.pub_date, self.poll)

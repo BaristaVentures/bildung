@@ -11,25 +11,29 @@
     <h1>{{ poll.question }}</h1>
 
     <h2>Comments about this question.</h2>
+    <hr>
 
     {% if error_message%}
     <p><strong>{{ error_message }}</strong></p>
     {% endif%}
 
     <div id="comments">
-      <script type="text/template" id="comments_template">
-	<hr>
-	<p>Author: <%= comment.get('author') %></p>
-	<p>Comment: <%= comment.get('comment') %></p>
-	<p>Published on: <%= comment.get('pub_date') %></p>
-	<hr>
-      </script>
-    </div>
+      <div id="comments_items">
+	<script type="text/template" id="comments_template">
+	  <p>Author: <%= comment.get('author') %></p>
+	  <p>Comment: <%= comment.get('comment') %></p>
+	  <p>Published on: <%= comment.get('pub_date') %></p>
+	  <hr>
+        </script>
+      </div>
 
-    <label>Author</label><br />
-    <input id="author"></input><br/>
-    <label>Comment</label><br />
-    <textarea id="comment" rows="15" cols="30"></textarea><br />
-    <button id="comment_button">Comment</button>
+      <label>Author</label><br />
+      <input id="author"></input><br/>
+      <label>Comment</label><br />
+      <textarea id="comment" rows="15" cols="30"></textarea><br />
+      <input id="poll" type="hidden" value="{{ poll.id }}" />
+      <button id="create_comment">Comment</button>
+    </div>
+    
   </body>
 </html>

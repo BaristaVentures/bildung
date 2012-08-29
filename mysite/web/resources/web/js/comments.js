@@ -50,14 +50,19 @@
 
       CommentsView.prototype.el = $('div#comments');
 
+      CommentsView.prototype.events = {
+        "click button#create_comment": "createComment"
+      };
+
       CommentsView.prototype.initialize = function() {
         _.bindAll(this);
         this.collection = new Comments();
+        this.collection.bind("add", this.appendComment);
         return this.render();
       };
 
       CommentsView.prototype.render = function() {
-        return this.getComments();
+        return this.readComments();
       };
 
       CommentsView.prototype.appendComment = function(comment) {
@@ -68,7 +73,32 @@
         return $(this.el).append(commentView.render().el);
       };
 
-      CommentsView.prototype.getComments = function() {
+      CommentsView.prototype.createComment = function() {
+        var comment, comment_author, comment_comment, comment_poll, self;
+        comment_author = $('input#author').val();
+        comment_comment = $('textarea#comment').val();
+        comment_poll = "/api/v1/polls/" + ($('input#poll').val()) + "/";
+        comment = new Comment();
+        comment.set({
+          author: comment_author,
+          comment: comment_comment,
+          pub_date: new Date(),
+          poll: comment_poll
+        });
+        self = this;
+        return comment.save({}, {
+          success: function() {
+            self.collection.add(comment);
+            $('input#author').val('');
+            return $('textarea#comment').val('');
+          },
+          error: function() {
+            return alert("An error occurred while attempting to create a Comment.");
+          }
+        });
+      };
+
+      CommentsView.prototype.readComments = function() {
         var self;
         self = this;
         return this.collection.fetch({
@@ -114,7 +144,7 @@
           comment: this.model
         };
         template = _.template($("script#comments_template").html(), variables);
-        return $(this.el).append(template);
+        return $('div#comments_items').append(template);
       };
 
       return CommentView;

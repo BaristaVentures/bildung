@@ -3,13 +3,17 @@ jQuery ->
     class CommentsView extends Backbone.View
         el: $('div#comments')
 
+        events:
+            "click button#create_comment": "createComment"
+
         initialize: ->
             _.bindAll @
             @collection = new Comments()
+            @collection.bind("add", @appendComment)
             @render()
 
         render: ->
-            @getComments()
+            @readComments()
 
         appendComment: (comment) ->
             commentView = new CommentView({
@@ -17,7 +21,28 @@ jQuery ->
             })
             $(@el).append(commentView.render().el)
 
-        getComments: ->
+        createComment: ->
+            comment_author = $('input#author').val()
+            comment_comment = $('textarea#comment').val()
+            comment_poll = "/api/v1/polls/#{ $('input#poll').val() }/"
+
+            comment = new Comment()
+            comment.set
+                author: comment_author,
+                comment: comment_comment,
+                pub_date: new Date(),
+                poll: comment_poll
+
+            self = @
+            comment.save {},
+                success: ->
+                    self.collection.add(comment)
+                    $('input#author').val('')
+                    $('textarea#comment').val('')
+                error: ->
+                    alert("An error occurred while attempting to create a Comment.")
+
+        readComments: ->
             self = @
             @collection.fetch
                 success: ->
@@ -26,18 +51,19 @@ jQuery ->
                 error: ->
                     alert("An error occurred while attempting to fetch Comments Collection.")
 
+
+
     class CommentView extends Backbone.View
         initialize: ->
             _.bindAll @
 
         render: ->
             @renderTemplate()
-            #$(@el).append("<p>Here comes the comments.</p>")
             return @
 
         renderTemplate: ->
             variables = { comment: @model }
             template = _.template($("script#comments_template").html(), variables)
-            $(@el).append(template)
+            $('div#comments_items').append(template)
 
     new CommentsView()
