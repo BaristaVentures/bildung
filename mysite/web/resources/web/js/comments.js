@@ -74,7 +74,7 @@
       };
 
       CommentsView.prototype.createComment = function() {
-        var comment, comment_author, comment_comment, comment_poll;
+        var comment, comment_author, comment_comment, comment_poll, self;
         comment_author = $('input#author').val();
         comment_comment = $('textarea#comment').val();
         comment_poll = "/api/v1/polls/" + ($('input#poll').val()) + "/";
@@ -85,10 +85,14 @@
           pub_date: new Date(),
           poll: comment_poll
         });
-        comment.save();
-        $('input#author').val('');
-        $('textarea#comment').val('');
-        return this.collection.add(comment);
+        self = this;
+        return comment.save({}, {
+          success: function(model, response) {
+            $('input#author').val('');
+            $('textarea#comment').val('');
+            return self.collection.add(model);
+          }
+        });
       };
 
       CommentsView.prototype.readComments = function() {
@@ -126,12 +130,15 @@
 
       CommentView.prototype.events = {
         "click button.delete_comment": "deleteComment",
-        "click button.edit_comment": "editComment"
+        "click button.edit_comment": "editComment",
+        "click button.cancel_update": "cancelUpdate",
+        "click button.update_comment": "updateComment"
       };
 
       CommentView.prototype.initialize = function() {
         _.bindAll(this);
-        return this.model.bind('remove', this.unrender);
+        this.model.bind('remove', this.unrender);
+        return this.model.bind('change', this.render);
       };
 
       CommentView.prototype.render = function() {
@@ -158,15 +165,27 @@
       };
 
       CommentView.prototype.editComment = function() {
-        $('input#author').val(this.model.get('author'));
-        $('textarea#comment').val(this.model.get('comment'));
-        return $('input#author').focus();
+        return $(".toggle_" + (this.model.get('id'))).toggle();
       };
 
       CommentView.prototype.updateComment = function() {
-        var comment_author, comment_comment;
+        var comment_author, comment_comment, self;
         comment_author = $('input#author').val();
-        return comment_comment = $('textarea#comment').val();
+        comment_comment = $('textarea#comment').val();
+        this.model.set({
+          author: comment_author,
+          comment: comment_comment
+        });
+        self = this;
+        return this.model.save({}, {
+          success: function() {
+            return self.cancelUpdate();
+          }
+        });
+      };
+
+      CommentView.prototype.cancelUpdate = function() {
+        return $(".toggle_" + (this.model.get('id'))).toggle();
       };
 
       return CommentView;

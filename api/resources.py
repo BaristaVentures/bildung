@@ -28,3 +28,4 @@ class CommentResource(ModelResource):
         resource_name = 'comments'
         allowed_methods = ['get', 'post', 'delete', 'put']
         authorization = Authorization()
+        always_return_data = True
