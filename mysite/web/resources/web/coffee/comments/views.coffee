@@ -20,7 +20,7 @@ jQuery ->
                 model: comment
 
 
-            $('ul#comment_list', @el).append(commentView.render().el)
+            $('div#comment_list', @el).append(commentView.render().el)
 
         createComment: ->
             comment_author = $('input#author').val()
@@ -54,7 +54,7 @@ jQuery ->
 
 
     class CommentView extends Backbone.View
-        tagName: 'li'
+        #tagName: 'li'
 
         events:
             "click button.delete_comment": "deleteComment"

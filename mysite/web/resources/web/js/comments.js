@@ -70,7 +70,7 @@
         commentView = new CommentView({
           model: comment
         });
-        return $('ul#comment_list', this.el).append(commentView.render().el);
+        return $('div#comment_list', this.el).append(commentView.render().el);
       };
 
       CommentsView.prototype.createComment = function() {
@@ -125,8 +125,6 @@
       function CommentView() {
         return CommentView.__super__.constructor.apply(this, arguments);
       }
-
-      CommentView.prototype.tagName = 'li';
 
       CommentView.prototype.events = {
         "click button.delete_comment": "deleteComment",
