@@ -80,24 +80,20 @@ jQuery ->
             $(@el).html(template)
 
         deleteComment: ->
-            alert("Destroy")
             @model.destroy()
 
         editComment: ->
             $(".toggle_#{ @model.get('id') }").toggle()
 
         updateComment: ->
-            comment_author = $('input#author').val()
-            comment_comment = $('textarea#comment').val()
+            comment_author = $("input#editing_author_#{ @model.get('id') }").val()
+            comment_comment = $("textarea#editing_comment_#{ @model.get('id') }").val()
 
             @model.set
                 author: comment_author
                 comment: comment_comment
 
-            self = @
-            @model.save {},
-                success: ->
-                    self.cancelUpdate()
+            @model.save
 
         cancelUpdate: ->
             $(".toggle_#{ @model.get('id') }").toggle()

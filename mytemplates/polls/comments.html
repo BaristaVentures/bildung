@@ -32,14 +32,15 @@
        <script type="text/template" id="comments_template">
 	 <p>ID: <%= comment.get('id') %></p>
 	 <span>Author: </span><span class="toggle_<%= comment.get('id') %>"><%= comment.get('author') %></span>
-	 <input class="toggle_<%= comment.get('id')%>" id="editing_author" style="display: none" value="<%= comment.get('author') %>"</input>
+	 <input class="toggle_<%= comment.get('id')%>" id="editing_author_<%= comment.get('id')%>" style="display: none" value="<%= comment.get('author') %>"</input>
 	 
          <br/><br />
 	 <span>Comment: </span><span class="toggle_<%= comment.get('id') %>"><%= comment.get('comment') %></span>
-	 <input class="toggle_<%= comment.get('id') %>" id="editing_comment" style="display: none" value="<%= comment.get('comment') %>"</input>
-		
-	 <p>Published on: <%= comment.get('pub_date') %></p>
-	 <button class="toggle_<%= comment.get('id') %> update_comment" style="display: none">Update</button>
+	 <br/>
+	 <textarea rows="15" cols="30" class="toggle_<%= comment.get('id') %>" id="editing_comment_<%= comment.get('id') %>" style="display: none"><%= comment.get('comment') %></textarea>
+		   
+		   <p>Published on: <%= comment.get('pub_date') %></p>
+	 <button class="update_comment toggle_<%= comment.get('id') %>" style="display: none">Update</button>
 	 <button class="toggle_<%= comment.get('id') %> cancel_update" style="display: none">Cancel</button>
 	 <button class="edit_comment toggle_<%= comment.get('id') %>">Edit</button>
 	 <button class="delete_comment toggle_<%= comment.get('id') %>">Delete</button>

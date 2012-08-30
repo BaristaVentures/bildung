@@ -160,7 +160,6 @@
       };
 
       CommentView.prototype.deleteComment = function() {
-        alert("Destroy");
         return this.model.destroy();
       };
 
@@ -169,19 +168,14 @@
       };
 
       CommentView.prototype.updateComment = function() {
-        var comment_author, comment_comment, self;
-        comment_author = $('input#author').val();
-        comment_comment = $('textarea#comment').val();
+        var comment_author, comment_comment;
+        comment_author = $("input#editing_author_" + (this.model.get('id'))).val();
+        comment_comment = $("textarea#editing_comment_" + (this.model.get('id'))).val();
         this.model.set({
           author: comment_author,
           comment: comment_comment
         });
-        self = this;
-        return this.model.save({}, {
-          success: function() {
-            return self.cancelUpdate();
-          }
-        });
+        return this.model.save;
       };
 
       CommentView.prototype.cancelUpdate = function() {
