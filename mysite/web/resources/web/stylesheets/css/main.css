@@ -1,0 +1,9 @@
+button.delete_comment {
+  background: #ff0000;
+}
+button.edit_comment {
+  background: #ffff00;
+}
+button#create_comment {
+  background: #008000;
+}
