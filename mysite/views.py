@@ -5,3 +5,6 @@ class BackbonePage(TemplateView):
 
 class CoffeeScriptPage(TemplateView):
     template_name = "coffeescript.html"
+
+class HomePage(TemplateView):
+    template_name = "home.html"
