@@ -1,1 +1,4 @@
 bildung/
+*~
+*.py[cod]
+pollswebdb
