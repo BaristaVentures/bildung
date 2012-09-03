@@ -4,7 +4,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('Sergio B', 'sergiobuj@gmail.com'),
+    ('SergioB', 'sergiobuj@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -28,7 +28,9 @@ TIME_ZONE = 'America/Bogota'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-us'
+# Remember to 'export LC_CTYPE=en_US.UTF-8' in case that locale goes
+# crazy again.
+LANGUAGE_CODE = 'en-US'
 
 SITE_ID = 1
 
@@ -115,11 +117,10 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+    'django.contrib.admin',
+    'polls',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'polls',
 )
 
 # A sample logging configuration. The only tangible logging
