@@ -11,4 +11,3 @@ venv
 .project
 .pydevproject
 .achievements
-*.coffee
