@@ -1,8 +1,8 @@
 <h1>Polls</h1>
 
-{% if latest_poll_list %}
+{% if poll_list %}
     <ul>
-    {% for poll in latest_poll_list %}
+    {% for poll in poll_list %}
         <li><a href="/polls/{{ poll.id }}/">{{ poll.question }}</a></li>
     {% endfor %}
     </ul>
