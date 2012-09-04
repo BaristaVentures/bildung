@@ -3,8 +3,8 @@ from django.views.generic import DetailView, ListView
 from polls.models import Poll
 
 # Uncomment the next two lines to enable the admin:
-from django.contrib import admin
-admin.autodiscover()
+#from django.contrib import admin
+#admin.autodiscover()
 
 urlpatterns = patterns('',
   url(r'^$',
