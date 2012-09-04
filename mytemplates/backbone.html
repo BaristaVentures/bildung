@@ -1,19 +1,21 @@
-<html>
-  <head>
-    <script type="text/javascript" src="/media/web/js/jquery-1.8.0.min.js"></script>
-    <script type="text/javascript" src="/media/web/js/underscore-min.js"></script>
-    <script type="text/javascript" src="/media/web/js/backbone-min.js"></script>
-        
-  </head>
-    <body>
+{% extends "home.html" %}
+{% block scripts %}
+  <script type="text/javascript" src="/media/web/js/jquery-1.8.0.min.js"></script>
+  <script type="text/javascript" src="/media/web/js/underscore-min.js"></script>
+  <script type="text/javascript" src="/media/web/js/backbone-min.js"></script>
+{% endblock scripts %}
 
-      <script type="text/javascript" src="/media/web/js/backbone/models.js"></script>
-      <script type="text/javascript" src="/media/web/js/backbone/views.js"></script>
-   
-      <label>Question:</label>
-      <input id="poll_question" />
-      <label>Publicaton Date:</label>
-      <input id="poll_pub_date" />
-      <button id="add_poll">Add poll</button>
-    </body>
-</html>
+{% block title %} Polls With Backbone {% endblock %}
+{% block h_title %} Polls With Backbone {% endblock %}
+
+{% block content %}
+  <script type="text/javascript" src="/media/web/js/backbone/models.js"></script>
+  <script type="text/javascript" src="/media/web/js/backbone/views.js"></script>
+  
+  <label>Question:</label>
+  <input id="poll_question" />
+  
+  <label>Publicaton Date:</label>
+  <input id="poll_pub_date" />
+  <button id="add_poll">Add poll</button>
+{% endblock content %}

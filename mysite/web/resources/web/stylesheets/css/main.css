@@ -7,3 +7,9 @@ button.edit_comment {
 button#create_comment {
   background: #008000;
 }
+img#polls_image {
+  width: 3%;
+  float: left;
+  margin-top: -1%;
+  margin-right: 1%;
+}
