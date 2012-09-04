@@ -1,10 +1,20 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <title>Bildung</title>
+    {% block scripts %}{% endblock %}
+    <title>{% block title %} Bildung {% endblock %}</title>
   </head>
   <body>
-    <a href="/polls">HTTP Polls</a><br />
-    <a href="/backbone">Backbone Polls</a><br />
-    <a href="/coffeescript">Coffee Script Polls (using Backbone)</a><br />
+    {% block nav_bar %}
+      <a href="/polls">HTTP Polls</a> | 
+      <a href="/backbone">Backbone Polls</a> |
+      <a href="/coffeescript">Coffee Script Polls (using Backbone)</a><br />
+    {% endblock nav_bar %}
+    
+    <h1>{% block h_title %} Home {% endblock %} </h1>
+
+    <div id="content">
+      {% block content %}{% endblock %}
+    </div>
   </body>
 </html>

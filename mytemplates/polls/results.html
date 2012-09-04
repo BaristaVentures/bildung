@@ -1,9 +1,13 @@
-<h1>{{ poll.question }}</h1>
+{% extends "home.html" %}
+{% block title %} Results: {{ poll.question }} {% endblock %}
+{% block h_title %} {{ poll.question }} {% endblock %}
 
-<ul>
-{% for choice in poll.choice_set.all %}
-    <li>{{ choice.choice }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
-{% endfor %}
-</ul>
-
-<a href="/polls/{{ poll.id }}/">Vote again?</a>
+{% block content %}
+  <ul>
+    {% for choice in poll.choice_set.all %}
+      <li>{{ choice.choice }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
+    {% endfor %}
+  </ul>
+  
+  <a href="/polls/{{ poll.id }}/">Vote again?</a>
+{% endblock  %}
