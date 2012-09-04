@@ -4,14 +4,13 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'pollsweb.views.home', name='home'),
-    # url(r'^pollsweb/', include('pollsweb.foo.urls')),
+urlpatterns = patterns('polls.views',
+    url(r'^polls/$', 'index'),
+    url(r'^polls/(?P<poll_id>\d+)/$', 'detail'),
+    url(r'^polls/(?P<poll_id>\d+)/results/$', 'results'),
+    url(r'^polls/(?P<poll_id>\d+)/vote/$', 'vote'),
+)
 
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
+urlpatterns += patterns('',
     url(r'^admin/', include(admin.site.urls)),
 )
