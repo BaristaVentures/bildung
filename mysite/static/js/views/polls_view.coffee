@@ -7,7 +7,7 @@ class PollsView extends Backbone.View
 		_.bindAll @, 'appendItem', 'addAll', 'render'
 		@collection = new window.app.Collections.Polls()
 		@collection.fetch()
-		@collection.bind 'add', @appendItem, @
+		@collection.bind 'add', @appendItem
 		@collection.bind 'reset', @addAll, @
 		@addAll()
 

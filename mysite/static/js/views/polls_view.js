@@ -19,7 +19,7 @@
       _.bindAll(this, 'appendItem', 'addAll', 'render');
       this.collection = new window.app.Collections.Polls();
       this.collection.fetch();
-      this.collection.bind('add', this.appendItem, this);
+      this.collection.bind('add', this.appendItem);
       this.collection.bind('reset', this.addAll, this);
       return this.addAll();
     };
