@@ -1,5 +1,9 @@
-from polls.models import Poll, Choice
+from polls.models import Poll, Choice, Comment
 from django.contrib import admin
+
+class CommentInline(admin.TabularInline):
+    model = Comment
+    extra = 1
 
 class ChoiceInline(admin.TabularInline):
     model = Choice
@@ -15,7 +19,7 @@ class PollAdmin(admin.ModelAdmin):
         ('Date information', {'fields': ['pub_date'], 'classes': ['collapse']}),
         ]
     # This option allows the user to add new choices to the poll by inline.
-    inlines = [ChoiceInline]
+    inlines = [ChoiceInline, CommentInline]
     # This option shows the information that is needed.
     list_display = ('question', 'pub_date', 'was_published_recently')
     # Add a filter side bar using this field as the criterion.
