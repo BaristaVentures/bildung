@@ -1,0 +1,51 @@
+{% extends "home.html" %}
+{% block scripts %}
+  <script type="text/javascript" src="/media/web/js/jquery-1.8.0.min.js"></script>
+  <script type="text/javascript" src="/media/web/js/underscore-min.js"></script>
+  <script type="text/javascript" src="/media/web/js/backbone-min.js"></script>
+  <script type="text/javascript" src="/media/web/js/comments.js"></script>
+{% endblock scripts %}
+{% block title %} Comments {% endblock %}
+
+
+{% block h_title %} {{ poll.question }} {% endblock %}
+
+<h2>Comments about this question.</h2>
+<hr />
+
+{% block content %}
+  {% if error_message%}
+    <p><strong>{{ error_message }}</strong></p>
+  {% endif%}
+
+  <div id="comments">
+    
+    <div id="comment_list"></div>
+    
+    <label>Author</label><br />
+    <input id="author"></input><br/>
+    <label>Comment</label><br />
+    <textarea id="comment" rows="15" cols="30"></textarea><br />
+    <input id="poll" type="hidden" value="{{ poll.id }}" />
+    <button id="create_comment">Comment</button>
+    
+    
+    <script type="text/template" id="comments_template">
+      <span>Author: </span><span class="toggle_<%= comment.get('id') %>"><%= comment.get('author') %></span>
+      <input class="toggle_<%= comment.get('id')%>" id="editing_author_<%= comment.get('id')%>" style="display: none" value="<%= comment.get('author') %>"</input>
+      
+      <br/><br />
+      <span>Comment: </span><span class="toggle_<%= comment.get('id') %>"><%= comment.get('comment') %></span>
+      <br/>
+      <textarea rows="15" cols="30" class="toggle_<%= comment.get('id') %>" id="editing_comment_<%= comment.get('id') %>" style="display: none"><%= comment.get('comment') %></textarea>
+      
+      <p>Published on: <%= comment.get('pub_date') %></p>
+      <button class="update_comment toggle_<%= comment.get('id') %>" style="display: none">Update</button>
+      <button class="toggle_<%= comment.get('id') %> cancel_update" style="display: none">Cancel</button>
+      <button class="edit_comment toggle_<%= comment.get('id') %>">Edit</button>
+      <button class="delete_comment toggle_<%= comment.get('id') %>">Delete</button>
+      <hr>
+      </script>
+      
+  </div>
+{% endblock content %}

@@ -1,0 +1,20 @@
+{% extends "home.html" %}
+{% block title %} {{ poll.question }} {% endblock %}
+{% block h_title %} {{ poll.question}} {% endblock %}
+
+{% block content %}
+  {% if error_message %}
+    <p><strong>{{ error_message }}</strong></p>
+  {% endif %}
+
+    <form action="/polls/{{ poll.id }}/vote/" method="post">
+      {% csrf_token %}
+
+      {% for choice in poll.choice_set.all %}
+	<input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
+	<label for="choice{{ forloop.counter }}">{{ choice.choice }}</label><br />
+      {% endfor %}
+      <input type="submit" value="Vote" /><br />
+      <a href="/polls/{{ poll.id }}/comments">Comments</a>
+    </form>
+  {% endblock content %}

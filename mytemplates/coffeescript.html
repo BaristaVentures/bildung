@@ -1,0 +1,30 @@
+{% extends "home.html" %}
+{% block scripts %}
+  <script type="text/javascript" src="/media/web/js/jquery-1.8.0.min.js"></script>
+  <script type="text/javascript" src="/media/web/js/underscore-min.js"></script>
+  <script type="text/javascript" src="/media/web/js/backbone-min.js"></script>
+  <script type="text/javascript" src="/media/web/js/app.js"></script>
+{% endblock scripts %}
+
+{% block title %} Coffee Script Client {% endblock %}
+{% block h_title %} Polls With Coffee Script {% endblock %}
+
+{% block content %}
+  <div id="polls">
+    <label>Question:</label>
+    <input id="poll_question" />
+    <label>Publicaton Date:</label>
+    <input id="poll_pub_date" />
+    <button id="add_poll">Add poll</button>
+    <ul id="polls"></ul>
+  </div>
+  
+  <script type="text/template" id="choices_template">
+    <label>Choice</label>
+    <input id="choice_name_poll_<%= poll_id %>"></input>
+    <label>Votes</label>
+    <input id="choice_votes_poll_<%= poll_id %>"></input>
+    <button id="add_choice_poll_<%= poll_id %>" >Add Choice</button>
+    <ul id='choices'></ul>
+  </script>
+{% endblock content %} 

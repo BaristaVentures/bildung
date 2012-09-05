@@ -1,0 +1,15 @@
+button.delete_comment {
+  background: #ff0000;
+}
+button.edit_comment {
+  background: #ffff00;
+}
+button#create_comment {
+  background: #008000;
+}
+img#polls_image {
+  width: 3%;
+  float: left;
+  margin-top: -1%;
+  margin-right: 1%;
+}
