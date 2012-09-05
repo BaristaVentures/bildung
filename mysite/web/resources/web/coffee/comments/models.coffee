@@ -1,3 +1,4 @@
+# Comment's model.
 class Comment extends Backbone.Model
     urlRoot: "/api/v1/comments/"
 
