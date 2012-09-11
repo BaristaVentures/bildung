@@ -1,48 +1,43 @@
 {% load verbatim %}
-<script src="{{ STATIC_URL }}required/coffee-script.js"></script>
-<script src="{{ STATIC_URL }}required/ICanHaz.min.js"></script>
-<script src="{{ STATIC_URL }}required/jquery.min.js"></script>
-<script src="{{ STATIC_URL }}required/json2.js"></script>
-<script src="{{ STATIC_URL }}required/underscore-min.js"></script>
-<script src="{{ STATIC_URL }}required/backbone-min.js"></script>
-<script src="{{ STATIC_URL }}required/backbone-tastypie.js"></script>
-<script>
-    POLLS_API = "{% url api_dispatch_list api_name="v1" resource_name="polls" %}";
-    {% if data %}
-        app = {loaded: true};
-    {% endif %}
-</script>
 
-{%verbatim%}
-    <script type="text/html" id="pollTemplate">
-      <a class="question">{{question}}</a>
-      <p class="pub_date">{{pub_date}}</p>
+<body>
+
+    <div id="app">
+      <div id="input">
+        <strong>New Poll</strong></br>
+        Question: </br><textarea id="question"></textarea></br>
+        <button class="create">Create</button>
+      </div>
+      <h2>Polls</h2>
+      <ul id="polls">
+      </ul>
+    </div>
+
+    <script src="{{ STATIC_URL }}required/coffee-script.js"></script>
+    <script src="{{ STATIC_URL }}required/jquery.min.js"></script>
+    <script src="{{ STATIC_URL }}required/underscore-min.js"></script>
+    <script src="{{ STATIC_URL }}required/backbone-min.js"></script>
+    <script src="{{ STATIC_URL }}required/backbone-tastypie.js"></script>
+    <script src="{{ STATIC_URL }}required/ICanHaz.min.js"></script>
+    <script src="{{ STATIC_URL }}required/json2.js"></script>
+    <script>
+        POLLS_API = "{% url api_dispatch_list api_name="v1" resource_name="polls" %}";
+        {% if data %}
+            app = {loaded: true};
+        {% endif %}
     </script>
-{%endverbatim%}
 
-<script type="text/javascript" src="{{STATIC_URL}}app.js"></script>
+    <script src="{{STATIC_URL}}app.js"></script>
+    {%verbatim%}
+        <script type="text/html" id="pollTemplate">
+            <a class="question" href="/{{id}}/">{{question}}</a>
+          <p class="pub_date">{{pub_date}}</p>
+        </script>
+    {%endverbatim%}
 
-<div id="app">
-  <div id="input">
-    <strong>New Poll</strong></br>
-    Question: </br><textarea id="question"></textarea></br>
-    <button class="create">Create</button>
-  </div>
-  <h2>Polls</h2>
-  <ul id="polls">
-  </ul>
-</div>
+    {%verbatim%}
+        <script type="text/html" id="appTemplate">
+        </script>
+    {%endverbatim%}
 
-<!--
-
-{% if latest_poll_list %}
-  <ul>
-  {% for poll in latest_poll_list %}
-    <li><a href="/polls/{{ poll.id }}/">{{ poll.question }}</a></li>
-  {% endfor %}
-  </ul>
-{% else %}
-  <p>No polls are available.</p>
-  {% endif %}
-
--->
+</body>
