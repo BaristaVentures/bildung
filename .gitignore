@@ -1,0 +1,9 @@
+#Django#
+########
+*.log
+*.pot
+*.pyc
+local_settings.py
+
+#virtualenv files#
+NULLINDUSTRIES/
