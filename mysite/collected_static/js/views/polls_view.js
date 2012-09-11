@@ -15,32 +15,32 @@
     PollsView.prototype.el = "#content";
 
     PollsView.prototype.initialize = function() {
-      console.log("polls view init");
-      _.bindAll(this, 'appendItem', 'addAll', 'render');
+      _.bindAll(this);
       this.collection = new window.app.Collections.Polls();
-      this.collection.bind('add', this.appendItem, this);
-      this.collection.bind('reset', this.addAll, this);
-      return this.addAll();
+      this.collection.bind('add', this.appendItem);
+      this.counter = 0;
+      return this.render();
     };
 
     PollsView.prototype.render = function() {
-      console.log("render polls");
-      return this;
+      console.log("render polls_view");
+      $(this.el).append('<button>Add List Item</button>');
+      return $(this.el).append('<ul></ul>');
+    };
+
+    PollsView.prototype.addItem = function() {
+      var poll;
+      this.counter++;
+      poll = new window.app.Models.Poll;
+      return this.collection.add(poll);
     };
 
     PollsView.prototype.appendItem = function(poll) {
-      var poll_view;
-      console.log("append item");
-      poll_view = new window.app.Views.PollView({
-        model: poll
-      });
-      return this.$el.append(poll_view.render().el);
+      return $('ul').append("<li>" + (poll.get('pub_date')) + " " + (poll.get('question')) + "!</li>");
     };
 
-    PollsView.prototype.addAll = function() {
-      console.log("addAll");
-      console.log(this.collection.models);
-      return console.log(this.collection.meta.total_count);
+    PollsView.prototype.events = {
+      'click button': 'addItem'
     };
 
     window.app.Views.PollsView = PollsView;

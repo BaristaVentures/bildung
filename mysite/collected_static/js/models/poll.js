@@ -12,6 +12,13 @@
       return Poll.__super__.constructor.apply(this, arguments);
     }
 
+    Poll.prototype.defaults = {
+      id: "10",
+      pub_date: "2015-07-26T23:38:12.644701+00:00",
+      question: "How to make this more amazing?",
+      resource_uri: "/api/rest/polls/10/"
+    };
+
     Poll.prototype.urlRoot = POLLS_API;
 
     return Poll;

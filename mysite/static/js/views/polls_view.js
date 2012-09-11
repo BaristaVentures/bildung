@@ -15,23 +15,29 @@
     PollsView.prototype.el = "#content";
 
     PollsView.prototype.initialize = function() {
-      console.log("polls view init");
-      _.bindAll(this, 'appendItem', 'addAll', 'render');
+      _.bindAll(this);
       this.collection = new window.app.Collections.Polls();
-      this.collection.fetch();
       this.collection.bind('add', this.appendItem);
-      this.collection.bind('reset', this.addAll, this);
+      this.collection.bind('reset', this.addAll);
+      this.collection.fetch();
+      this.render();
       return this.addAll();
     };
 
     PollsView.prototype.render = function() {
-      console.log("render polls");
-      return this;
+      console.log("render polls_view");
+      $(this.el).append('<button>Add List Item</button>');
+      return $(this.el).append('<ul></ul>');
+    };
+
+    PollsView.prototype.addItem = function() {
+      var poll;
+      poll = new window.app.Models.Poll;
+      return this.collection.add(poll);
     };
 
     PollsView.prototype.appendItem = function(poll) {
       var poll_view;
-      console.log("append item");
       poll_view = new window.app.Views.PollView({
         model: poll
       });
@@ -42,6 +48,10 @@
       console.log("addAll");
       console.log(this.collection.models);
       return this.collection.each(this.appendItem);
+    };
+
+    PollsView.prototype.events = {
+      'click button': 'addItem'
     };
 
     window.app.Views.PollsView = PollsView;
