@@ -3,6 +3,16 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
+from django.views.generic.base import TemplateView
+
+
+class IndexView(TemplateView):
+    template_name = 'polls/index.html'
+
+
+class DetailView(TemplateView):
+    template_name = 'polls/index.html'
+
 
 def vote(request, poll_id):
   p = get_object_or_404(Poll, pk=poll_id)

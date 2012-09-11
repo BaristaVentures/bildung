@@ -23,11 +23,10 @@ window.PollView = Backbone.View.extend({
   tagName: 'li',
   className: 'poll',
 
-    /*
+    
   initialize: function() {
       this.model.on('change', this.render, this);
-      this.model.on('destroy', this.remove, this);
-  },*/
+  },
 
   render: function(){
       $(this.el).html(ich.pollTemplate(this.model.toJSON()));
@@ -35,6 +34,21 @@ window.PollView = Backbone.View.extend({
   }                                        
 });
 
+window.DetailApp = Backbone.View.extend({
+    events: {
+        'click .home': 'home'
+    },
+    
+    home: function(e){
+        this.trigger('home');
+        e.preventDefault();
+    },
+
+    render: function(){
+        $(this.el).html(ich.detailTemplate(this.model.toJSON()));
+        return this;
+    }                                        
+});
 
 window.App = Backbone.View.extend({
   el: $('#app'),
@@ -63,7 +77,6 @@ window.App = Backbone.View.extend({
   },
  
   createPoll: function(){
-      alert("event fired");
       var poll = this.$('#question').val();
       if(poll){
           this.polls.create({
@@ -78,7 +91,7 @@ window.App = Backbone.View.extend({
 
 window.Router = Backbone.Router.extend({
     routes: {
-            '': 'polls',
+            'polls/': 'polls',
             'polls/:id/': 'detail'
         },
     navigate_to: function(model){
@@ -86,6 +99,9 @@ window.Router = Backbone.Router.extend({
             alert(path);
             this.navigate(path, true);
         },
+    polls: function(){},
+
+    detail: function(){}
 });
 
 window.app = window.app || {};
@@ -95,4 +111,28 @@ app.list = new App({
     el : $("#app"),
     collection : app.polls,
 });
+
+app.detail = new DetailApp({
+    el: $("#app")
+});
+
+app.router.bind('route:polls', function(){
+    app.polls.fetch({
+        success: _.bind(app.list.render, app.list)                
+    });
+});
+
+app.router.bind('route:detail', function(id){
+    app.polls.fetch(app.polls.urlRoot + id + '/', {
+                success: function(model){
+                    app.detail.model = model;
+                    app.detail.render();                    
+                }
+    })
+});
 app.list.bind('navigate', app.router.navigate_to, app.router);
+
+//This is a must to start the router, if not present the router wont work
+Backbone.history.start({
+    pushState: true
+});

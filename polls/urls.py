@@ -1,5 +1,7 @@
 from django.conf.urls import patterns, include, url
-from django.views.generic import DetailView, ListView
+from django.views.generic import ListView
+from django.views.generic import DetailView as dv
+from .views import DetailView, IndexView
 from polls.models import Poll
 
 # Uncomment the next two lines to enable the admin:
@@ -8,16 +10,13 @@ from polls.models import Poll
 
 urlpatterns = patterns('',
   url(r'^$',
-    ListView.as_view(
-      queryset=Poll.objects.order_by('-pub_date')[:5],
-      context_object_name='latest_poll_list',
-      template_name='polls/index.html')),
+    IndexView.as_view(),
+      name='index'),
   url(r'^(?P<pk>\d+)/$',
-    DetailView.as_view(
-      model=Poll,
-      template_name='polls/detail.html')),
+    DetailView.as_view(),
+      name='detail'),
   url(r'^(?P<pk>\d+)/results/$',
-    DetailView.as_view(
+    dv.as_view(
       model=Poll,
       template_name='polls/results.html'),
       name='poll_results'),

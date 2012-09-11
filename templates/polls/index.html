@@ -30,13 +30,31 @@
     <script src="{{STATIC_URL}}app.js"></script>
     {%verbatim%}
         <script type="text/html" id="pollTemplate">
-            <a class="question" href="/{{id}}/">{{question}}</a>
+            <a class="question" href="/polls/{{id}}/">{{question}}</a>
           <p class="pub_date">{{pub_date}}</p>
         </script>
     {%endverbatim%}
 
     {%verbatim%}
-        <script type="text/html" id="appTemplate">
+        <script type="text/html" id="detailTemplate">
+            <h2>
+              <a class="home" href="/polls">Home</a>
+            </h2>
+            <h3>{{ question }}</h3>
+            <h4>{{ pub_date }}</h4>
+        </script>
+    {%endverbatim%}
+
+    {%verbatim%}
+        <script type="text/html" id="listTemplate">
+            <div id="input">
+                    <strong>New Poll</strong></br>
+                    Question: </br><textarea id="question"></textarea></br>
+                    <button class="create">Create</button>
+            </div>
+            <h2>Polls</h2>
+            <ul id="polls">
+            </ul>
         </script>
     {%endverbatim%}
 
