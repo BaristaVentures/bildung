@@ -18,8 +18,10 @@
       _.bindAll(this);
       this.collection = new window.app.Collections.Polls();
       this.collection.bind('add', this.appendItem);
-      this.counter = 0;
-      return this.render();
+      this.collection.bind('reset', this.addAll);
+      this.collection.fetch();
+      this.render();
+      return this.addAll();
     };
 
     PollsView.prototype.render = function() {
@@ -30,13 +32,22 @@
 
     PollsView.prototype.addItem = function() {
       var poll;
-      this.counter++;
       poll = new window.app.Models.Poll;
       return this.collection.add(poll);
     };
 
     PollsView.prototype.appendItem = function(poll) {
-      return $('ul').append("<li>" + (poll.get('pub_date')) + " " + (poll.get('question')) + "!</li>");
+      var poll_view;
+      poll_view = new window.app.Views.PollView({
+        model: poll
+      });
+      return this.$el.append(poll_view.render().el);
+    };
+
+    PollsView.prototype.addAll = function() {
+      console.log("addAll");
+      console.log(this.collection.models);
+      return this.collection.each(this.appendItem);
     };
 
     PollsView.prototype.events = {

@@ -5,7 +5,6 @@
     <title>hello-backbonejs</title>
   </head>
   <body>
-    
     <script>
       POLLS_API = "{% url api_dispatch_list api_name="rest" resource_name="polls" %}";
     </script>
@@ -26,5 +25,7 @@
     <h1>Polls app</h1>    
     <div id="content">
     </div>
+    <script src="{{ STATIC_URL }}js/views/polls_view.js"></script>
+    <script src="{{ STATIC_URL }}js/collections/polls.js"></script>
   </body>
   </html>

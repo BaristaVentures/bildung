@@ -7,19 +7,18 @@ class PollsView extends Backbone.View
 
     #initialize: ->
         #_.bindAll @
-        #@collection = new window.app.Collections.Polls
+        #@collection = new window.app.Collections.Polls()
         #@collection.bind 'add', @appendItem
         #render()
-	initialize: ->
-
-	  _.bindAll @
-
-	  @collection = new window.app.Collections.Polls()
-	  @collection.bind 'add', @appendItem
-
-	  @counter = 0
-
-	  @render()
+ initialize: ->
+      #console.log "render polls_vie"
+    _.bindAll @
+    @collection = new window.app.Collections.Polls()
+    @collection.bind 'add', @appendItem
+    @collection.bind 'reset', @addAll
+    @collection.fetch()
+    @render()
+    @addAll()
 		#_.bindAll @, 'appendItem', 'addAll', 'addItem', 'render	'
 		#_.bindAll @, 'render'
 
@@ -31,22 +30,29 @@ class PollsView extends Backbone.View
 		#@addAll()
 		#@addItem()
 		#@render()
-  render: ->
-    console.log "render polls_view"
-    $(@el).append '<button>Add List Item</button>'
-    $(@el).append '<ul></ul>'
+
+ render: ->
+   console.log "render polls_view"
+   $(@el).append '<button>Add List Item</button>'
+   $(@el).append '<ul></ul>'
 
 
-  addItem: ->
-    @counter++
-    poll = new window.app.Models.Poll
-    #poll.set part2: "#{item.get 'part2'} #{@counter}"
-    @collection.add poll
+ addItem: ->
+   poll = new window.app.Models.Poll
+   #poll.set part2: "#{item.get 'part2'} #{@counter}"
+   @collection.add poll
 
-  appendItem: (poll) ->
-    $('ul').append "<li>#{poll.get 'pub_date'} #{poll.get 'question'}!</li>"
+ appendItem: (poll) ->
+   #$('ul').append "<li>#{poll.get 'pub_date'} #{poll.get 'question'}!</li>"
+   poll_view = new window.app.Views.PollView model: poll
+   @$el.append poll_view.render().el
 
-  events: 'click button': 'addItem'
+ addAll: ->
+   console.log "addAll"
+   console.log @collection.models
+   @collection.each(@appendItem)
+
+ events: 'click button': 'addItem'
 
     #render: ->
         #console.log "render polls view"
@@ -77,4 +83,4 @@ class PollsView extends Backbone.View
 		#console.log @collection.meta.total_count
 		#@collection.each(@appendItem)
 
-	window.app.Views.PollsView = PollsView
+ window.app.Views.PollsView = PollsView
