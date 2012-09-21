@@ -20,8 +20,7 @@
       this.collection.bind('add', this.appendItem);
       this.collection.bind('reset', this.addAll);
       this.collection.fetch();
-      this.render();
-      return this.addAll();
+      return this.render();
     };
 
     PollsView.prototype.render = function() {
@@ -33,7 +32,8 @@
     PollsView.prototype.addItem = function() {
       var poll;
       poll = new window.app.Models.Poll;
-      return this.collection.add(poll);
+      this.collection.add(poll);
+      return poll.save();
     };
 
     PollsView.prototype.appendItem = function(poll) {

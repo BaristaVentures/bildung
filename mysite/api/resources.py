@@ -10,11 +10,9 @@ class PollResource(ModelResource):
         queryset = Poll.objects.all()
         authorization = Authorization()
         resource_name = 'polls'
-        # authorization= Authorization()
-        # allowed_methods = ['get']
-        # list_allowed_methods = ['get', 'post']
+        list_allowed_methods = ['get', 'post', 'delete', 'put']
         # http://127.0.0.1:8000/api/rest/polls/?format=json
-
+        
     def dehydrate(self, bundle):
          bundle.data['choices'] = [{'choice':ch.choice, 'votes':ch.votes} for ch in bundle.obj.choice_set.all()]
          return bundle
@@ -26,3 +24,4 @@ class ChoiceResource(ModelResource):
         queryset = Choice.objects.all()
         authorization = Authorization()
         resource_name = 'choices'
+        list_allowed_methods = ['get', 'post', 'delete', 'put']
