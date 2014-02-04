@@ -1,0 +1,13 @@
+venv
+*.pyc
+*~
+#*#
+#*
+*#
+.#*
+*.egg-info
+.db
+.settings_local
+.project
+.pydevproject
+.achievements

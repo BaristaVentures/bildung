@@ -1,0 +1,10 @@
+{% load templatetag_handlebars %}
+{% tplhandlebars "poll_template" %}
+    <div class="poll">
+      <span style="color: red;">Question: {{question}}</span>
+      <p>{{pub_date}}</p>
+      {{#each choices}}
+      	{{this.choice}}, {{this.votes}}
+      {{/each}}
+    </div>
+{% endtplhandlebars %}
